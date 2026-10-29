@@ -92,29 +92,7 @@ export default function HomePage() {
                 <FiMap size={15} /> Open Map View
               </Link>
             </div>
-
-            {/* Verified Features Pills */}
-            <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/15 pt-6 text-xs font-medium text-white/85">
-              <div className="flex items-center gap-1.5">
-                <FiCheckCircle className="text-emerald-400" size={15} />
-                <span>Field-Verified GPS</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FiCheckCircle className="text-emerald-400" size={15} />
-                <span>8-Parameter Lab Testing</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FiCheckCircle className="text-emerald-400" size={15} />
-                <span>Open Community Access</span>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* Bottom-right photo tag badge */}
-        <div className="pointer-events-none absolute bottom-5 right-6 hidden lg:flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md shadow-xs">
-          <FiDroplet size={12} className="text-brand-300" />
-          <span>Himalayan Water Source · Uttarakhand</span>
         </div>
       </section>
 
@@ -154,7 +132,7 @@ export default function HomePage() {
             </p>
             <ul className="grid gap-2.5 pt-2 sm:grid-cols-2">
               {[
-                'Open, map-based source registry',
+                'Open, map-based source database',
                 'Field-verified water quality data',
                 'Community-led monitoring',
                 'Evidence for policy planning',
