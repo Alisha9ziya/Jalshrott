@@ -189,27 +189,53 @@ export default function MapPage() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="OpenStreetMap"
-        title="Map View"
-        description="Explore documented water sources by location, district and resource type."
-        actions={
-          canManageSources ? (
-            <Button onClick={openAdd} icon={<FiPlus size={15} />}>
-              Add source
-            </Button>
-          ) : (
+      {/* Sleek, Purpose-Built Map Header Bar */}
+      <div className="border-b border-ink-200/80 bg-white/95 px-4 py-3 backdrop-blur-md sm:px-6 sm:py-3.5 lg:px-8 dark:border-ink-800 dark:bg-ink-950/95">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-inset ring-brand-200/70 dark:bg-brand-500/15 dark:text-brand-300 dark:ring-brand-500/30">
+                <FiMapPin size={18} />
+              </span>
+              <div>
+                <h1 className="font-display text-base font-bold tracking-tight text-ink-900 sm:text-lg dark:text-white">
+                  Map View
+                </h1>
+                <p className="text-xs text-ink-500 dark:text-ink-400">
+                  Interactive GIS Database &middot; Uttarakhand Watersheds
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden h-6 w-px bg-ink-200 sm:block dark:bg-ink-800" />
+
+            <div className="hidden items-center gap-1.5 rounded-full border border-ink-200 bg-ink-50 px-3 py-1 text-xs font-semibold text-ink-700 sm:inline-flex dark:border-ink-800 dark:bg-ink-900 dark:text-ink-200">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>
+                {loading ? 'Loading sources…' : `${visibleSources.length} of ${sources.length} sources visible`}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
             <Link
               to="/sources"
-              className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-700 transition hover:border-brand-300 hover:text-brand-700 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-200"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-ink-200/80 bg-white px-3.5 text-xs font-semibold text-ink-700 shadow-2xs transition hover:border-brand-300 hover:text-brand-700 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-200 dark:hover:border-brand-500/40"
             >
-              <FiLayers size={15} /> List view
+              <FiLayers size={13} />
+              <span>List View</span>
             </Link>
-          )
-        }
-      />
 
-      <div className="flex flex-col lg:h-[calc(100dvh-14.75rem)] lg:flex-row">
+            {canManageSources && (
+              <Button size="sm" onClick={openAdd} icon={<FiPlus size={14} />}>
+                Add Source
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:h-[calc(100dvh-7.75rem)] lg:flex-row">
         {/* Sidebar */}
         <aside className="thin-scrollbar flex w-full shrink-0 flex-col border-b border-ink-200 bg-white lg:w-80 lg:overflow-y-auto lg:border-b-0 lg:border-r dark:border-ink-800 dark:bg-ink-950">
           <div className="border-b border-ink-100 px-4 py-4 dark:border-ink-800">

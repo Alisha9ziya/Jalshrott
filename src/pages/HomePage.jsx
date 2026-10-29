@@ -1,88 +1,120 @@
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  FiArrowRight,
-  FiBookOpen,
-  FiCheckCircle,
-  FiDroplet,
-  FiLayers,
-  FiMap,
-  FiShield,
-} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiArrowRight, FiCheckCircle, FiDroplet, FiMap } from 'react-icons/fi';
+import { FaMountain, FaSeedling, FaWater } from 'react-icons/fa';
 import { useSources } from '../hooks/useSources';
 import { SITE, sourceTypeMeta } from '../constants';
-import SourceCard from '../components/sources/SourceCard';
-import { Spinner } from '../components/ui/Spinner';
+import heroImage from '../assets/hero-waterfall.jpg';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1800&q=80';
-
-function Stat({ value, label, loading }) {
-  return (
-    <div className="rounded-xl border border-ink-200 bg-white px-4 py-3.5 dark:border-ink-800 dark:bg-ink-900">
-      <p className="font-display text-2xl font-bold text-brand-700 dark:text-brand-300">
-        {loading ? <Spinner size={18} className="text-brand-500" /> : value}
-      </p>
-      <p className="mt-0.5 text-xs font-medium text-ink-500 dark:text-ink-400">{label}</p>
-    </div>
-  );
-}
+const FOCUS = [
+  {
+    icon: FiDroplet,
+    title: 'Smart Water Resource Management',
+    text: 'Exploring approaches toward smarter management of water resources in the Himalayan context.',
+    tint: 'bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300',
+  },
+  {
+    icon: FaSeedling,
+    title: 'Sustainable Water Resources',
+    text: 'Promoting a long-term perspective on the sustainable management of water resources.',
+    tint: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300',
+  },
+  {
+    icon: FaMountain,
+    title: 'Himalayan Communities',
+    text: 'Recognizing the importance of sustainable water resources for communities in the Himalayan region.',
+    tint: 'bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300',
+  },
+  {
+    icon: FaWater,
+    title: 'Downstream Resilience',
+    text: 'Considering the broader importance of water-resource resilience for downstream regions.',
+    tint: 'bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300',
+  },
+];
 
 export default function HomePage() {
-  const { sources, stats, loading, error } = useSources();
-  const navigate = useNavigate();
-
-  const districtCount =
-    stats?.byDistrict ? Object.keys(stats.byDistrict).length : new Set(sources.map((s) => s.district).filter(Boolean)).size;
-  const potable = stats?.potable ?? sources.filter((source) => source.isPotable).length;
-  const typeCount = Object.keys(stats?.byType || {}).length || new Set(sources.map((s) => s.sourceType)).size;
-  const latest = sources.slice(0, 3);
+  const { stats } = useSources();
 
   return (
     <div>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate min-h-[560px] sm:min-h-[600px] lg:min-h-[640px] flex items-center overflow-hidden bg-brand-950 text-white">
+        {/* Full-bleed high-res background image */}
         <img
-          src={HERO_IMAGE}
-          alt="Himalayan mountain range with clouds"
-          className="absolute inset-0 h-full w-full object-cover"
+          src={heroImage}
+          alt="Pristine Himalayan waterfall and water source in Uttarakhand"
+          className="absolute inset-0 h-full w-full object-cover object-[center_35%] lg:object-[center_25%]"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-950/85 via-brand-900/60 to-brand-800/25" />
-        <div className="relative mx-auto flex max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
-          <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-            <FiDroplet size={12} /> {SITE.project}
-          </p>
-          <h1 className="max-w-3xl text-balance text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-[2.9rem]">
-            Discover and Protect Our Water Sources
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
-            A living registry of springs, streams, ponds and community water sources across
-            Uttarakhand — mapped, measured and maintained together.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link
-              to="/sources"
-              className="inline-flex h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-semibold text-brand-800 shadow-sm transition hover:bg-brand-50"
-            >
-              Explore water sources <FiArrowRight size={15} />
-            </Link>
-            <Link
-              to="/map"
-              className="inline-flex h-11 items-center gap-2 rounded-lg border border-white/40 px-5 text-sm font-semibold text-white transition hover:bg-white/10"
-            >
-              <FiMap size={15} /> Open map view
-            </Link>
+
+        {/* Directional gradient overlay: deep dark protection on the left for text, clear and vivid on the right */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-brand-950/95 via-brand-950/75 via-45% to-brand-950/25 sm:via-brand-950/70"
+        />
+        {/* Subtle vertical gradients for top navigation blend and bottom section transition */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-transparent to-black/25"
+        />
+
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+          <div className="max-w-2xl lg:max-w-3xl">
+            {/* Pill */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-brand-200 backdrop-blur-md shadow-xs">
+              <FiDroplet size={13} className="text-brand-300" />
+              {SITE.project}
+            </span>
+
+            {/* Headline */}
+            <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-4xl lg:text-5xl">
+              Discover and Protect Our Water Sources
+            </h1>
+
+            {/* Subtitle */}
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/90 drop-shadow-xs sm:text-base">
+              A living public database of springs, streams, ponds, and community water sources
+              across Uttarakhand — mapped, measured, and maintained together.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                to="/sources"
+                className="inline-flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-brand-950 shadow-md transition hover:bg-brand-50"
+              >
+                Explore Water Sources <FiArrowRight size={15} />
+              </Link>
+              <Link
+                to="/map"
+                className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/30 bg-black/35 px-5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-black/50"
+              >
+                <FiMap size={15} /> Open Map View
+              </Link>
+            </div>
+
+            {/* Verified Features Pills */}
+            <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/15 pt-6 text-xs font-medium text-white/85">
+              <div className="flex items-center gap-1.5">
+                <FiCheckCircle className="text-emerald-400" size={15} />
+                <span>Field-Verified GPS</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <FiCheckCircle className="text-emerald-400" size={15} />
+                <span>8-Parameter Lab Testing</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <FiCheckCircle className="text-emerald-400" size={15} />
+                <span>Open Community Access</span>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Quick stats */}
-      <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-3 rounded-2xl border border-ink-200 bg-white/95 p-3 shadow-soft backdrop-blur sm:grid-cols-4 dark:border-ink-800 dark:bg-ink-900/95">
-          <Stat value={stats?.total ?? sources.length} label="Documented sources" loading={loading} />
-          <Stat value={districtCount} label="Districts covered" loading={loading} />
-          <Stat value={typeCount} label="Source types" loading={loading} />
-          <Stat value={potable} label="Marked potable" loading={loading} />
+        {/* Bottom-right photo tag badge */}
+        <div className="pointer-events-none absolute bottom-5 right-6 hidden lg:flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md shadow-xs">
+          <FiDroplet size={12} className="text-brand-300" />
+          <span>Himalayan Water Source · Uttarakhand</span>
         </div>
       </section>
 
@@ -143,102 +175,59 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* What you can do */}
+      {/* Our focus */}
       <section className="border-y border-ink-200 bg-white py-16 dark:border-ink-800 dark:bg-ink-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-2xl font-bold text-ink-900 dark:text-white">Everything in one place</h2>
-              <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">
-                Browse the registry, inspect water quality, or explore sources on the map.
-              </p>
-            </div>
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
+              Our focus
+            </span>
+            <h2 className="mt-3 text-balance text-2xl font-bold leading-tight text-ink-900 sm:text-[2rem] dark:text-white">
+              Working Towards Water Resilience
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-ink-500 dark:text-ink-400">
+              Our project focuses on smart management, sustainability and resilience of Himalayan
+              water resources.
+            </p>
           </div>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                icon: FiLayers,
-                title: 'Complete registry',
-                text: 'Every documented source with coordinates, village, duration and full water quality results.',
-                to: '/sources',
-                cta: 'Browse sources',
-              },
-              {
-                icon: FiMap,
-                title: 'Interactive map',
-                text: 'Explore sources on OpenStreetMap, filter by region and search any location in the Himalayas.',
-                to: '/map',
-                cta: 'Open the map',
-              },
-              {
-                icon: FiShield,
-                title: 'Managed data',
-                text: 'Authorised administrators keep records current, verifying quality tests and maintenance history.',
-                to: '/contact',
-                cta: 'Request access',
-              },
-            ].map((feature) => (
-              <Link
-                key={feature.title}
-                to={feature.to}
-                className="group rounded-xl border border-ink-200 bg-ink-50/50 p-5 transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-soft dark:border-ink-800 dark:bg-ink-900/60 dark:hover:border-brand-500/40"
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {FOCUS.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-ink-200 bg-white p-5 dark:border-ink-800 dark:bg-ink-900"
               >
-                <span className="grid h-10 w-10 place-items-center rounded-lg bg-brand-600/10 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
-                  <feature.icon size={19} />
+                <span className={`grid h-10 w-10 place-items-center rounded-lg ${item.tint}`}>
+                  <item.icon size={18} />
                 </span>
-                <h3 className="mt-4 text-base font-semibold text-ink-900 dark:text-white">{feature.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-500 dark:text-ink-400">{feature.text}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-700 group-hover:gap-1.5 dark:text-brand-300">
-                  {feature.cta} <FiArrowRight size={12} />
-                </span>
-              </Link>
+                <h3 className="mt-4 text-base font-semibold text-ink-900 dark:text-white">{item.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-500 dark:text-ink-400">{item.text}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Latest sources */}
+      {/* Discover. Document. Protect. */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-2xl font-bold text-ink-900 dark:text-white">Recently documented</h2>
-            <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">
-              The latest entries added to the water source registry.
-            </p>
+        <div className="rounded-2xl border border-brand-100 bg-brand-50 px-6 py-10 sm:px-10 dark:border-brand-500/30 dark:bg-brand-500/10">
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <div className="max-w-2xl">
+              <h2 className="text-2xl font-bold text-brand-900 dark:text-white">
+                Discover. Document. Protect.
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-brand-800/80 dark:text-brand-100/80">
+                Help build awareness and support sustainable water resource management.
+              </p>
+            </div>
+            <Link
+              to="/sources"
+              className="inline-flex h-11 items-center gap-2 rounded-lg bg-brand-700 px-5 text-sm font-semibold text-white transition hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500"
+            >
+              View Water Sources <FiArrowRight size={15} />
+            </Link>
           </div>
-          <Link
-            to="/sources"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300"
-          >
-            View all <FiArrowRight size={14} />
-          </Link>
         </div>
-
-        {error ? (
-          <p className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-            {error}
-          </p>
-        ) : loading ? (
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[0, 1, 2].map((item) => (
-              <div key={item} className="h-44 animate-pulse rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900" />
-            ))}
-          </div>
-        ) : latest.length ? (
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((source) => (
-              <SourceCard key={source.id} source={source} onView={() => navigate('/sources')} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6 rounded-xl border border-dashed border-ink-300 px-6 py-12 text-center dark:border-ink-700">
-            <FiBookOpen size={22} className="mx-auto text-ink-400" />
-            <p className="mt-2 text-sm text-ink-500 dark:text-ink-400">
-              No sources documented yet. Sign in as an administrator to add the first one.
-            </p>
-          </div>
-        )}
       </section>
 
       {/* CTA */}

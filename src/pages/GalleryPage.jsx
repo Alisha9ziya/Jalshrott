@@ -10,11 +10,9 @@ import { useAuth } from '../context/AuthContext';
 import { useAuthDialog } from '../context/AuthDialogContext';
 import { useToast } from '../context/ToastContext';
 import { deleteGalleryItem } from '../api/gallery';
-import { GALLERY } from '../constants';
 import {
   getEmbedUrl,
   getVideoThumbnail,
-  normalizeMedia,
 } from '../lib/media';
 
 function MediaCard({ item, featured, onOpen, onDelete, canManage }) {
@@ -27,7 +25,7 @@ function MediaCard({ item, featured, onOpen, onDelete, canManage }) {
     <button
       type="button"
       onClick={() => onOpen(item)}
-      className={`group relative overflow-hidden rounded-xl border border-ink-200 text-left dark:border-ink-800 ${
+      className={`group relative overflow-hidden rounded-2xl border border-ink-200/90 bg-ink-950 text-left shadow-soft transition-all duration-300 hover:border-brand-400/60 hover:shadow-lift dark:border-ink-800 ${
         featured ? 'sm:row-span-2' : ''
       }`}
     >
@@ -37,28 +35,28 @@ function MediaCard({ item, featured, onOpen, onDelete, canManage }) {
           alt={item.title}
           loading="lazy"
           onError={() => setThumbnailFailed(true)}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
       ) : (
-        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-700 to-brand-950">
+        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-700 via-brand-850 to-brand-950">
           {item.type === 'video' ? (
-            <FiPlay size={34} className="text-white/40" />
+            <FiPlay size={36} className="text-white/40" />
           ) : (
-            <FiImage size={34} className="text-white/40" />
+            <FiImage size={36} className="text-white/40" />
           )}
         </span>
       )}
 
-      <span className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent" />
+      <span className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-ink-950/20 to-transparent" />
 
-      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-md bg-ink-950/60 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur">
+      <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
         {item.type === 'video' ? <FiFilm size={11} /> : <FiImage size={11} />}
         {item.type === 'video' ? 'Video' : 'Photo'}
       </span>
 
       {item.type === 'video' && (
         <span className="absolute inset-0 grid place-items-center">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-white/90 text-brand-800 shadow-lift transition group-hover:scale-105">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-white/95 text-brand-800 shadow-lift backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-500 group-hover:text-white">
             <FiPlay size={18} className="ml-0.5" />
           </span>
         </span>
@@ -79,20 +77,24 @@ function MediaCard({ item, featured, onOpen, onDelete, canManage }) {
               onDelete(item);
             }
           }}
-          className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-ink-950/60 text-white backdrop-blur transition hover:bg-rose-600"
+          className="absolute right-3.5 top-3.5 grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-ink-950/70 text-white backdrop-blur-md transition hover:border-rose-500 hover:bg-rose-600"
           aria-label={`Delete ${item.title}`}
         >
           <FiTrash2 size={14} />
         </span>
       )}
 
-      <span className="absolute inset-x-0 bottom-0 p-4">
+      <span className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
         <span className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold text-white">{item.title}</span>
-          <FiMaximize2 size={14} className="shrink-0 text-white/70" />
+          <span className="font-display text-sm sm:text-base font-bold tracking-tight text-white drop-shadow-xs">
+            {item.title}
+          </span>
+          <FiMaximize2 size={14} className="shrink-0 text-white/70 transition group-hover:scale-110 group-hover:text-white" />
         </span>
         {item.caption && (
-          <span className="mt-0.5 line-clamp-2 block text-xs text-white/70">{item.caption}</span>
+          <span className="mt-1 line-clamp-2 block text-xs leading-relaxed text-white/80">
+            {item.caption}
+          </span>
         )}
       </span>
     </button>
@@ -110,8 +112,7 @@ export default function GalleryPage() {
   const [deleting, setDeleting] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const usingFallback = !loading && items.length === 0;
-  const media = usingFallback ? GALLERY.map(normalizeMedia) : items;
+  const media = items;
 
   const handleDelete = async () => {
     if (!deleting) return;
@@ -131,9 +132,9 @@ export default function GalleryPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Gallery"
-        title="Water sources in the field"
-        description="Photos and videos from field surveys across the watersheds of Uttarakhand."
+        eyebrow="Field Gallery"
+        title="Water Sources in the Field"
+        description="Photographic and video documentation from hydrological surveys across Uttarakhand watersheds."
         actions={
           canManageSources ? (
             <Button icon={<FiPlus size={15} />} onClick={() => setFormOpen(true)}>
@@ -149,17 +150,17 @@ export default function GalleryPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {loading ? (
-          <div className="grid auto-rows-[220px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid auto-rows-[230px] gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2, 3, 4, 5].map((item) => (
               <div
                 key={item}
-                className="animate-pulse rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900"
+                className="animate-pulse rounded-2xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900"
               />
             ))}
           </div>
         ) : media.length ? (
           <>
-            <div className="grid auto-rows-[220px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid auto-rows-[230px] gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {media.map((item, index) => (
                 <MediaCard
                   key={item.id || `${item.url}-${index}`}
@@ -171,27 +172,25 @@ export default function GalleryPage() {
                 />
               ))}
             </div>
-            {usingFallback && (
-              <p className="mt-5 text-center text-xs text-ink-400">
-                Showing sample project photos. Administrators can add real photos and videos.
-              </p>
-            )}
-            {!usingFallback && error && (
+            {error && (
               <p className="mt-5 text-center text-xs text-rose-500">{error}</p>
             )}
           </>
         ) : (
-          <div className="rounded-xl border border-dashed border-ink-300 px-6 py-16 text-center dark:border-ink-700">
-            <FiImage size={26} className="mx-auto text-ink-400" />
-            <h2 className="mt-3 text-base font-semibold text-ink-800 dark:text-ink-100">
-              The gallery is empty
+          <div className="rounded-2xl border border-ink-200/90 bg-white px-6 py-16 text-center shadow-soft dark:border-ink-800 dark:bg-ink-900">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-inset ring-brand-200/70 dark:bg-brand-500/15 dark:text-brand-300 dark:ring-brand-500/30">
+              <FiImage size={26} />
+            </div>
+            <h2 className="mt-4 font-display text-lg font-bold text-ink-900 dark:text-white">
+              The Field Gallery is Empty
             </h2>
-            <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-              Administrators can add photos and videos from the field.
+            <p className="mx-auto mt-1.5 max-w-md text-sm text-ink-500 dark:text-ink-400">
+              Field survey teams and researchers can upload verified photos and video captures of water sources directly to this gallery.
             </p>
+            {error && <p className="mt-3 text-xs text-rose-500">{error}</p>}
             {canManageSources && (
-              <Button className="mt-4" icon={<FiPlus size={14} />} onClick={() => setFormOpen(true)}>
-                Add the first media
+              <Button className="mt-5" icon={<FiPlus size={14} />} onClick={() => setFormOpen(true)}>
+                Add First Media
               </Button>
             )}
           </div>

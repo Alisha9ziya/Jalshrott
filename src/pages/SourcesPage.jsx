@@ -133,7 +133,7 @@ export default function SourcesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Public registry"
+        eyebrow="Documented Sources"
         title="Water Sources"
         description="Explore all documented water sources and view their complete details."
         actions={
@@ -157,7 +157,7 @@ export default function SourcesPage() {
       />
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-xl border border-ink-200 bg-white p-4 shadow-soft dark:border-ink-800 dark:bg-ink-900">
+        <div className="rounded-2xl border border-ink-200/90 bg-white p-5 sm:p-6 shadow-soft dark:border-ink-800 dark:bg-ink-900">
           <SourceFilters
             filters={filters}
             onChange={handleFilterChange}
@@ -166,20 +166,32 @@ export default function SourcesPage() {
           />
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink-500 dark:text-ink-400">
-            {loading
-              ? 'Loading sources…'
-              : `Showing ${filtered.length} source${filtered.length === 1 ? '' : 's'}${
-                  hasFilters ? ' matching your filters' : ''
-                }`}
-          </p>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-200/80 bg-white px-3 py-1 text-xs font-semibold text-ink-700 shadow-2xs dark:border-ink-800 dark:bg-ink-900 dark:text-ink-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {loading
+                ? 'Loading sources…'
+                : `Showing ${filtered.length} source${filtered.length === 1 ? '' : 's'}${
+                    hasFilters ? ' matching your filters' : ''
+                  }`}
+            </span>
+            {hasFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="text-xs font-semibold text-brand-600 transition hover:text-brand-700 hover:underline dark:text-brand-400"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
           <button
             type="button"
             onClick={reload}
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-semibold text-ink-500 transition hover:bg-ink-100 hover:text-ink-800 dark:text-ink-400 dark:hover:bg-ink-800 dark:hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200/80 bg-white px-3 py-1.5 text-xs font-semibold text-ink-600 shadow-2xs transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:border-ink-800 dark:bg-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-white"
           >
-            <FiRefreshCw size={12} /> Refresh
+            <FiRefreshCw size={12} className={loading ? 'animate-spin' : ''} /> Refresh Data
           </button>
         </div>
 
