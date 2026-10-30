@@ -1,155 +1,202 @@
-# JalSrot — Web App
+# JalSrot – Water Resource Monitoring & Registry Platform
 
-Frontend for the JalSrot water resource registry. Built with **React 19 + Vite**, **Tailwind CSS v4**, **React Router**, **OpenStreetMap (Leaflet)** and **react-icons**.
+**JalSrot** is a web-based platform designed to support the discovery, documentation, monitoring, and management of water resources.
 
-The app has two experiences:
+The platform provides a centralized interface for exploring water sources, viewing water quality information, understanding geographical distribution, and supporting data-driven water resource management.
 
-- **Public view** — browse the water source registry, filter and search, inspect full water quality details, and explore sources on an OpenStreetMap map.
-- **Admin view** — government users / authorised source managers can add, edit and delete sources, manage user permissions, set their region, and add photos or videos to the gallery.
-- **Live storage volume** — each source can have a storage area (m²) and a linked sensor device. Hardware pushes water-height readings to the backend, and the dashboard shows the resulting **Volume** (m³).
+## Key Features
 
-## Quick start
+### 1. Water Resource Registry
+- Browse and explore registered water sources.
+- Search and filter sources using relevant attributes.
+- View detailed information about individual water resources.
+- Access geographical and water quality information.
+
+### 2. Interactive Map
+- Explore registered water sources through an interactive map.
+- View geographical locations using OpenStreetMap.
+- Support location-based exploration of water resources.
+
+### 3. Water Quality Information
+- Display water quality parameters, including:
+  - pH
+  - Total Dissolved Solids (TDS)
+  - Electrical Conductivity
+  - Turbidity
+  - Total Alkalinity
+  - Total Acidity
+  - Total Hardness
+  - Chloride levels
+- Present available water quality information in a structured format.
+
+### 4. Administrative Dashboard
+- Manage registered water source information.
+- Add, update, and remove source records.
+- Manage authorized user permissions.
+- Configure geographical and source-related information.
+
+### 5. Storage Volume Monitoring
+- Support integration with water-level monitoring hardware.
+- Record water-level measurements.
+- Estimate water storage volume using configured storage area and measured water height.
+- Maintain historical measurement records.
+
+The volume estimation follows:
+
+**Volume = Storage Area × Water Height**
+
+### 6. Media Gallery
+- Display photographs and videos related to water resources.
+- Support media links and descriptive captions.
+- Provide a centralized gallery for project-related visual documentation.
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | React 19 |
+| Build Tool | Vite |
+| Styling | Tailwind CSS v4 |
+| Routing | React Router |
+| Mapping | Leaflet |
+| Map Data | OpenStreetMap |
+| Icons | React Icons |
+| Backend Integration | REST APIs |
+
+## Application Structure
+
+The application is organized into modular components:
+
+- **API Layer:** Communication with backend services.
+- **Components:** Reusable interface elements.
+- **Pages:** Application-level views and navigation.
+- **Context:** Application-wide state management.
+- **Hooks:** Reusable application logic.
+- **Utilities:** Data processing and helper functions.
+- **Constants:** Shared application configuration.
+
+## Getting Started
+
+### Prerequisites
+
+Ensure that the following tools are installed:
+
+- Node.js
+- npm
+- Git
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Alisha9ziya/Jalshrott.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd Jalshrott
+```
+
+Install dependencies:
 
 ```bash
 npm install
-cp .env.example .env    # point VITE_API_URL at the backend
+```
+
+### Environment Configuration
+
+Configure the frontend API endpoint using an environment file.
+
+Create a `.env` file based on the project's environment template and configure the required API URL.
+
+Example:
+
+```env
+VITE_API_URL=your_backend_api_url
+```
+
+Do not commit credentials, API keys, passwords, or other confidential configuration values to the repository.
+
+### Run Development Server
+
+```bash
 npm run dev
 ```
 
-The dev server runs on <http://localhost:5173> by default.
+The development server is available at:
+
+```text
+http://localhost:5173
+```
+
+### Production Build
 
 ```bash
-npm run build     # production build → dist/
-npm run preview   # preview the production build
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Code Quality
+
+```bash
 npm run lint
 ```
 
-## Backend
+## Hardware Integration
 
-The API lives in `../../global_backend`. Start it first:
+JalSrot is designed to support integration with external water-level monitoring devices.
 
-```bash
-cd ../../global_backend
-npm install
-npm run dev        # http://localhost:5000
-```
+The hardware integration architecture supports:
 
-Optional demo data (10 sources in Pauri Garhwal):
+- Water-level measurement collection.
+- Device-based identification.
+- Measurement recording.
+- Water storage volume estimation.
+- Historical reading management.
 
-```bash
-npm run seed            # only if the registry is empty
-npm run seed -- --reset # replace existing sources
-```
+Hardware communication and authentication are handled through backend services.
 
-## Environment
+## Access and User Roles
 
-| Variable       | Default                     | Description                    |
-| -------------- | --------------------------- | ------------------------------ |
-| `VITE_API_URL` | `http://localhost:5000/api` | Base URL of the backend API.   |
+The platform supports role-based access:
 
-## Routes
+- **Government Administrator:** Administrative management and user permission control.
+- **Source Manager:** Management of water source records.
+- **Public User:** Access to publicly available water resource information.
 
-| Route       | Page              | Access            |
-| ----------- | ----------------- | ----------------- |
-| `/`         | Home              | Public            |
-| `/about`    | About the project | Public            |
-| `/sources`  | Water source list | Public            |
-| `/map`      | Map view          | Public            |
-| `/research` | Research team     | Public            |
-| `/gallery`  | Gallery           | Public            |
-| `/contact`  | Contact & support | Public            |
-| `/admin`    | Admin dashboard   | Source managers   |
+Access to administrative operations is controlled by the application backend.
 
-## Project structure
+## Mapping and Geographical Data
 
-```
-src/
-├── api/            # fetch client + auth/source endpoints
-├── components/
-│   ├── auth/       # sign-in modal, user menu
-│   ├── brand/      # logo
-│   ├── gallery/    # add-media modal
-│   ├── layout/     # navbar, footer, page header, layout
-│   ├── map/        # Leaflet map canvas + location picker
-│   ├── sources/    # table, filters, cards, detail + form modals
-│   └── ui/         # buttons, fields, modal, badges, pagination…
-├── constants/      # site copy, source types, quality fields, navigation
-├── context/        # auth, theme, toasts, auth dialog
-├── hooks/          # source/gallery fetching + debounce helpers
-├── lib/            # normalisation, filtering, geo/media helpers
-├── pages/          # route-level pages
-├── App.jsx         # providers + routes
-└── main.jsx        # entry point
-```
+The platform uses:
 
-## Data model (frontend)
+- **Leaflet** for interactive map rendering.
+- **OpenStreetMap** for geographical map data.
+- **Nominatim** for location search and geocoding.
 
-Each source is normalised in `src/lib/source.js`:
+External mapping services are subject to their respective usage policies and limitations.
 
-```js
-{
-  id, name, sourceType, village, district, state,
-  latitude, longitude, duration, condition,
-  isPotable, seasonal, verified,
-  ph, quality: { tds, electricalConductivity, turbidity,
-                 totalAlkalinity, totalAcidity, totalHardness, chlorides },
-  usersPerDay, distanceFromVillage, notes,
-  area, deviceId, latestHeight, volume, lastReadingAt,
-  lastTestedAt, lastMaintenanceAt, createdAt, updatedAt
-}
-```
+## Deployment
 
-## Storage volume & hardware readings
+The frontend can be deployed using modern static web hosting platforms.
 
-Administrators set two extra fields on a source:
+The application supports production builds through Vite. Backend services and API endpoints must be configured separately for the deployed environment.
 
-| Field            | Unit | Meaning                                                        |
-| ---------------- | ---- | -------------------------------------------------------------- |
-| Storage area     | m²   | Cross-section/storage area configured by an admin.              |
-| Sensor device ID | —    | Identifier the field hardware sends, e.g. `jalsrot-sensor-01`. |
+## Project Objective
 
-When hardware posts a height reading, the backend computes:
+JalSrot aims to improve the accessibility and organization of water resource information through digital mapping, structured data management, water quality documentation, and hardware-assisted monitoring.
 
-```text
-volume (m³) = area (m²) × height (m)
-```
+By combining web technologies with potential IoT integration, the platform provides a foundation for more informed and accessible water resource management.
 
-and stores the latest height/volume on the source plus a full reading history. Hardware authenticates with the shared `HARDWARE_API_KEY` from `global_backend/.env` (restart the backend after changing it):
+---
 
-```bash
-curl -X POST http://localhost:5000/api/hardware/readings \
-  -H 'Content-Type: application/json' \
-  -H 'x-api-key: YOUR_HARDWARE_API_KEY' \
-  -d '{"deviceId":"jalsrot-sensor-01","height":75,"unit":"cm"}'
-```
-
-- Send either `deviceId` or `sourceId`.
-- `unit` accepts `m` (default), `cm` or `mm`; the backend normalises to metres.
-- `recordedAt` is optional (ISO timestamp).
-- `GET /api/hardware/readings/:sourceId` (admin token) returns recent readings.
-
-If a source has no area yet, readings are still recorded but `volume` stays empty until an admin sets the area — saving the area recalculates the volume immediately.
-
-## Gallery
-
-`/gallery` is public. Source managers see **Add media** and can add photos and videos by URL:
-
-- Direct image links (any `http(s)` image URL).
-- YouTube, Vimeo, or direct video links (`.mp4`, `.webm`, `.ogg`, `.mov`).
-- An optional caption and thumbnail; YouTube covers are detected automatically.
-
-Gallery records are stored by the backend (`/api/gallery`) and the page falls back to built-in sample photos while the database is empty.
-
-
-## Roles
-
-- **Government** — full admin access; can also toggle source-management permission for other users.
-- **Source manager** — can add/edit/delete sources.
-- **Public** — read-only access to the registry and map.
-
-The **first registered account becomes a government administrator**. Additional government emails can be configured on the backend with `GOVERNMENT_EMAILS`.
-
-## Map & geocoding
-
-- Tiles: OpenStreetMap (`tile.openstreetmap.org`).
-- Location search uses the public Nominatim geocoder. It is rate-limited — for high-traffic deployments, proxy geocoding through your backend or use a commercial provider.
+**Project:** JalSrot  
+**Category:** Water Resource Management | Web Development | IoT Integration  
+**Repository:** [GitHub – JalSrot](https://github.com/Alisha9ziya/Jalshrott)
